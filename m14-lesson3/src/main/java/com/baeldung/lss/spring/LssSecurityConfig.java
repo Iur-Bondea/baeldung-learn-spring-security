@@ -9,6 +9,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
@@ -16,19 +17,26 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableReactiveMethodSecurity
 public class LssSecurityConfig {
 
-    @SuppressWarnings("deprecation")
+    private PasswordEncoder passwordEncoder;
+
+    public LssSecurityConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Bean
     public MapReactiveUserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-            .username("user")
-            .password("pass")
-            .roles("USER")
-            .build();
-        UserDetails admin = User.withDefaultPasswordEncoder()
-            .username("admin")
-            .password("pass")
-            .roles("ADMIN")
-            .build();
+        UserDetails user = User.builder()
+                .passwordEncoder(passwordEncoder::encode)
+                .username("user")
+                .password("pass")
+                .roles("USER")
+                .build();
+        UserDetails admin = User.builder()
+                .passwordEncoder(passwordEncoder::encode)
+                .username("admin")
+                .password("pass")
+                .roles("ADMIN")
+                .build();
 
         return new MapReactiveUserDetailsService(user, admin);
     }
