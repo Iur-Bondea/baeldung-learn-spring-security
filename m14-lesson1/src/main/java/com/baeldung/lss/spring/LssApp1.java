@@ -9,10 +9,17 @@ import com.baeldung.lss.persistence.InMemoryUserRepository;
 import com.baeldung.lss.persistence.UserRepository;
 import com.baeldung.lss.web.model.User;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication(scanBasePackages = { "com.baeldung.lss.web", "com.baeldung.lss.spring" })
 public class LssApp1 {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
 
     @Bean
     public UserRepository userRepository() {
