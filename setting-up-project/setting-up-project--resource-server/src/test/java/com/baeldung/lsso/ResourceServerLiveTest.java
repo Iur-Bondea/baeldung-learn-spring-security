@@ -77,7 +77,7 @@ public class ResourceServerLiveTest {
             .get(String.format(AUTHORIZE_URL_PATTERN, "notSupported"));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND.value());
-        assertThat(response.getHeader(HttpHeaders.LOCATION)).contains("error=invalid_request")
+        assertThat(response.getHeader(HttpHeaders.LOCATION)).contains("error=invalid_scope")
             .contains("error_description=Invalid+scopes%3A+notSupported");
     }
 
